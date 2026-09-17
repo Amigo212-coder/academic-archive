@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#2563eb">
+<meta name="description" content="أرشيف أكاديمي رقمي مجاني لطلاب كلية التربية.">
+<meta name="author" content="M.A.Abdalhamid">
+<title>الأرشيف الأكاديمي الرقمي</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%233b82f6'/%3E%3Cstop offset='100%25' stop-color='%231e3a8a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='22' fill='%23ffffff'/%3E%3Cpath d='M50 20 L15 40 L50 60 L85 40 Z' fill='url(%23g)'/%3E%3Cpath d='M15 55 L50 75 L85 55' fill='none' stroke='%23f59e0b' stroke-width='9' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M15 70 L50 90 L85 70' fill='none' stroke='%2310b981' stroke-width='9' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+
+<!-- ============ الخطوط والأيقونات ============ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;600;700&family=Cairo:wght@400;600;700;800;900&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- ============ CSS الرئيسي ============ -->
+<link rel="stylesheet" href="styles.css">
+
+<!-- ============ كود مبكر (inline - يمنع وميض الشاشة) ============ -->
+<script>
+(function() {
+    try {
+        var mode = localStorage.getItem('darkMode');
+        var isDark = (mode === '1' || mode === 'on') || ((mode === null || mode === 'auto') && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        if (isDark) {
+            document.documentElement.classList.add('dark-mode');
+            var meta = document.querySelector('meta[name="theme-color"]');
+            if (meta) meta.setAttribute('content', '#0b1220');
+        }
+        var color = localStorage.getItem('set_color') || 'blue';
+        document.documentElement.setAttribute('data-color', color);
+        var radius = localStorage.getItem('set_radius') || 'normal';
+        document.documentElement.setAttribute('data-radius', radius);
+        var cpr = localStorage.getItem('set_cards_per_row') || 'auto';
+        document.documentElement.setAttribute('data-cards', cpr);
+        if ((localStorage.getItem('set_shadows') || '1') === '0') document.documentElement.classList.add('no-shadows');
+        if ((localStorage.getItem('set_animations') || '1') === '0') document.documentElement.classList.add('no-anim');
+        if (localStorage.getItem('set_hide_stats') === '1') document.documentElement.classList.add('hide-stats');
+        if (localStorage.getItem('set_hide_update') === '1') document.documentElement.classList.add('hide-update');
+        if (localStorage.getItem('set_hide_recent') === '1') document.documentElement.classList.add('hide-recent');
+        if (localStorage.getItem('set_hide_contributors') === '1') document.documentElement.classList.add('hide-contributors');
+        if (localStorage.getItem('set_hide_tools') === '1') document.documentElement.classList.add('hide-tools');
+        if (localStorage.getItem('set_hide_about') === '1') document.documentElement.classList.add('hide-about');
+        if (localStorage.getItem('set_hide_faq') === '1') document.documentElement.classList.add('hide-faq');
+        if (localStorage.getItem('set_hide_badges') === '1') document.documentElement.classList.add('hide-badges');
+        if (localStorage.getItem('set_hide_cursor') === '1') document.documentElement.classList.add('no-custom-cursor');
+        if (localStorage.getItem('set_hide_shine') === '1') document.documentElement.classList.add('no-shine');
+        if (localStorage.getItem('set_hide_waves') === '1') document.documentElement.classList.add('hide-waves');
+        if (localStorage.getItem('set_hide_topo') === '1') document.documentElement.classList.add('hide-topo');
+        if (localStorage.getItem('set_hide_tilt') === '1') document.documentElement.classList.add('no-tilt');
+        if (localStorage.getItem('set_hide_ripple') === '1') document.documentElement.classList.add('no-ripple');
+        if (localStorage.getItem('set_hide_typewriter') === '1') document.documentElement.classList.add('no-typewriter');
+        if (localStorage.getItem('set_hide_user_stats') === '1') document.documentElement.classList.add('hide-user-stats');
+        if (localStorage.getItem('set_hide_watching') === '1') document.documentElement.classList.add('hide-watching');
+        if (localStorage.getItem('set_hide_connection') === '1') document.documentElement.classList.add('hide-connection');
+        if (localStorage.getItem('set_hide_refresh') === '1') document.documentElement.classList.add('hide-refresh');
+        if (localStorage.getItem('set_perf') === '1') document.documentElement.classList.add('perf-mode');
+    } catch(e) {}
+})();
+</script>
+
+<!-- ============ مكتبات خارجية ============ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+
+<!-- ============ سكريبتات التطبيق ============ -->
+<script src="db.js" defer></script>
+<script src="app.js" defer></script>
+</head>
+<body>
+
+<div class="reading-progress-bar" id="readingProgressBar"></div>
+<div id="customCursor"></div>
+
+<!-- 🌐 حالة الاتصال -->
+<div class="connection-status online" id="connectionStatus">
+    <i class="fa-solid fa-circle"></i>
+    <span id="connectionLabel" data-i18n="onlineLabel">متصل</span>
+</div>
+
+<!-- 📌 زر الخروج من وضع القراءة -->
+<button class="reading-mode-exit" onclick="toggleReadingMode()" id="readingModeExit">
+    <i class="fa-solid fa-xmark"></i> <span data-i18n="exitReadingMode">خروج من وضع القراءة</span>
+</button>
+
+<!-- 📋 قائمة السياق للمزيد -->
+<div id="moreMenuPopup" class="more-menu-popup">
+    <button onclick="moreMenuAction('qr')"><i class="fa-solid fa-qrcode"></i> <span data-i18n="menuQR">عرض رمز QR</span></button>
+    <button onclick="moreMenuAction('copyLink')"><i class="fa-solid fa-link"></i> <span data-i18n="menuCopyLink">نسخ الرابط المباشر</span></button>
+    <button onclick="moreMenuAction('pin')"><i class="fa-solid fa-thumbtack"></i> <span data-i18n="menuPin">تثبيت في الأعلى</span></button>
+    <button onclick="moreMenuAction('print')"><i class="fa-solid fa-print"></i> <span data-i18n="menuPrint">طباعة البطاقة</span></button>
+    <div class="menu-divider"></div>
+    <button onclick="moreMenuAction('report')"><i class="fa-solid fa-triangle-exclamation"></i> <span data-i18n="menuReport">إبلاغ عن رابط معطل</span></button>
+</div>
+
+<!-- ⚙️ نافذة الإعدادات -->
+<div id="settingsModal" class="settings-modal-overlay" onclick="if(event.target===this)closeSettingsModal()">
+    <div class="settings-modal-box">
+        <div class="settings-modal-header">
+            <h2><i class="fa-solid fa-sliders"></i> <span data-i18n="settingsTitle">الإعدادات</span></h2>
+            <button class="settings-close-btn" onclick="closeSettingsModal()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="settings-modal-body">
+            <div class="settings-section">
+                <h3><i class="fa-solid fa-palette"></i> <span data-i18n="setSectionAppearance">المظهر</span></h3>
+                <div class="settings-row">
+                    <label data-i18n="setTheme">الوضع</label>
+                    <select class="settings-select" id="setDarkMode" onchange="applySetting('darkMode', this.value)">
+                        <option value="auto" data-i18n="darkAuto">🌗 تلقائي</option>
+                        <option value="on" data-i18n="darkOn">🌙 مفعّل</option>
+                        <option value="off" data-i18n="darkOff">☀️ معطّل</option>
+                    </select>
+                </div>
+                <div class="settings-row">
+                    <label data-i18n="setColor">اللون الأساسي</label>
+                    <div class="color-swatches" id="colorSwatches">
+                        <div class="color-swatch" data-color="blue" style="background:#2563eb;" onclick="setColor('blue')"></div>
+                        <div class="color-swatch" data-color="green" style="background:#059669;" onclick="setColor('green')"></div>
+                        <div class="color-swatch" data-color="purple" style="background:#7c3aed;" onclick="setColor('purple')"></div>
+                        <div class="color-swatch" data-color="red" style="background:#dc2626;" onclick="setColor('red')"></div>
+                        <div class="color-swatch" data-color="orange" style="background:#ea580c;" onclick="setColor('orange')"></div>
+                        <div class="color-swatch" data-color="gold" style="background:#d97706;" onclick="setColor('gold')"></div>
+                    </div>
+                </div>
+                <div class="settings-row">
+                    <label data-i18n="setRadius">استدارة الحواف</label>
+                    <div class="radius-buttons" id="radiusButtons">
+                        <button class="radius-btn" data-radius="sharp" onclick="setRadius('sharp')" data-i18n="radiusSharp">حادة</button>
+                        <button class="radius-btn" data-radius="normal" onclick="setRadius('normal')" data-i18n="radiusNormal">عادية</button>
+                        <button class="radius-btn" data-radius="round" onclick="setRadius('round')" data-i18n="radiusRound">دائرية</button>
+                    </div>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h3><i class="fa-solid fa-eye"></i> <span data-i18n="setSectionDisplay">العرض والقراءة</span></h3>
+                <div class="settings-row">
+                    <label data-i18n="setFontSize">حجم الخط</label>
+                    <div style="display:flex;gap:6px;">
+                        <button class="btn-icon ripple-btn" style="width:36px;height:36px;" onclick="decreaseFontSize()"><i class="fa-solid fa-minus"></i></button>
+                        <button class="btn-icon ripple-btn" style="width:36px;height:36px;" onclick="increaseFontSize()"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                </div>
+                <div class="settings-row">
+                    <label data-i18n="setCardsPerRow">عدد البطاقات في الصف</label>
+                    <select class="settings-select" id="setCardsPerRow" onchange="applySetting('cards', this.value)">
+                        <option value="auto" data-i18n="cardsAuto">تلقائي</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+                </div>
+                <div class="settings-row">
+                    <label data-i18n="readingModeLabel">وضع القراءة المريح</label>
+                    <button class="settings-action-btn ripple-btn" onclick="toggleReadingMode(); closeSettingsModal();" style="max-width: 140px;">
+                        <i class="fa-solid fa-book-open"></i> <span data-i18n="readingModeActivate">تفعيل</span>
+                    </button>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h3><i class="fa-solid fa-list-check"></i> <span data-i18n="setSectionVisibility">إظهار/إخفاء العناصر</span></h3>
+                <div class="settings-row"><label data-i18n="visStats">📊 شريط الإحصائيات</label><div class="settings-switch" id="sw_hide_stats" onclick="toggleSetting('hide_stats', this)"></div></div>
+                <div class="settings-row"><label data-i18n="visUpdate">🕒 شارة آخر تحديث</label><div class="settings-switch" id="sw_hide_update" onclick="toggleSetting('hide_update', this)"></div></div>
+                <div class="settings-row"><label data-i18n="visRecent">👁️ قسم "شوهد مؤخراً"</label><div class="settings-switch" id="sw_hide_recent" onclick="toggleSetting('hide_recent', this)"></div></div>
+                <div class="settings-row"><label data-i18n="visContributors">🏆 قسم أكثر المساهمين</label><div class="settings-switch" id="sw_hide_contributors" onclick="toggleSetting('hide_contributors', this)"></div></div>
+                <div class="settings-row"><label data-i18n="visTools">🛠️ مكتبة الأدوات</label><div class="settings-switch" id="sw_hide_tools" onclick="toggleSetting('hide_tools', this)"></div></div>
+                <div class="settings-row"><label data-i18n="visAbout">🌟 قسم "عن المنصة"</label><div class="settings-switch" id="sw_hide_about" onclick="toggleSetting('hide_about', this)"></div></div>
+                <div class="settings-row"><label data-i18n="visFaq">❓ الأسئلة الشائعة</label><div class="settings-switch" id="sw_hide_faq" onclick="toggleSetting('hide_faq', this)"></div></div>
+                <div class="settings-row"><label data-i18n="visBadges">🏷️ الشارات</label><div class="settings-switch" id="sw_hide_badges" onclick="toggleSetting('hide_badges', this)"></div></div>
+                <div class="settings-row"><label data-i18n="visUserStats">📊 إحصائياتي الشخصية</label><div class="settings-switch" id="sw_hide_user_stats" onclick="toggleSetting('hide_user_stats', this)"></div></div>
+                <div class="settings-row"><label data-i18n="visWatching">👥 يشاهدون الآن</label><div class="settings-switch" id="sw_hide_watching" onclick="toggleSetting('hide_watching', this)"></div></div>
+                <div class="settings-row"><label data-i18n="visConnection">🌐 حالة الاتصال</label><div class="settings-switch" id="sw_hide_connection" onclick="toggleSetting('hide_connection', this)"></div></div>
+                <div class="settings-row"><label data-i18n="visRefresh">🔄 زر التحديث السريع</label><div class="settings-switch" id="sw_hide_refresh" onclick="toggleSetting('hide_refresh', this)"></div></div>
+            </div>
+            <div class="settings-section">
+                <h3><i class="fa-solid fa-sparkles"></i> <span data-i18n="setSectionVisual">إضافات جمالية</span></h3>
+                <div class="settings-row"><label data-i18n="visWaves">🌊 موجات SVG الفاصلة</label><div class="settings-switch" id="sw_hide_waves" onclick="toggleSetting('hide_waves', this)"></div></div>
+                <div class="settings-row"><label data-i18n="visTopo">🌅 خلفية Hero الطبوغرافية</label><div class="settings-switch" id="sw_hide_topo" onclick="toggleSetting('hide_topo', this)"></div></div>
+                <div class="settings-row"><label data-i18n="visTilt">✨ ميلان البطاقات 3D</label><div class="settings-switch" id="sw_hide_tilt" onclick="toggleSetting('hide_tilt', this)"></div></div>
+                <div class="settings-row"><label data-i18n="visRipple">💧 تأثير Ripple الأزرار</label><div class="settings-switch" id="sw_hide_ripple" onclick="toggleSetting('hide_ripple', this)"></div></div>
+                <div class="settings-row"><label data-i18n="visTypewriter">✍️ آلة كاتبة العنوان</label><div class="settings-switch" id="sw_hide_typewriter" onclick="toggleSetting('hide_typewriter', this)"></div></div>
+            </div>
+            <div class="settings-section">
+                <h3><i class="fa-solid fa-wand-magic-sparkles"></i> <span data-i18n="setSectionEffects">الحركات والمؤثرات</span></h3>
+                <div class="settings-row"><label data-i18n="visAnimations">✨ الحركات والانتقالات</label><div class="settings-switch" id="sw_animations" onclick="toggleSetting('animations', this)"></div></div>
+                <div class="settings-row"><label data-i18n="visCursor">🖱️ المؤشر المخصص</label><div class="settings-switch" id="sw_hide_cursor" onclick="toggleSetting('hide_cursor', this)"></div></div>
+                <div class="settings-row"><label data-i18n="visShine">💫 تأثير اللمعان على الأزرار</label><div class="settings-switch" id="sw_hide_shine" onclick="toggleSetting('hide_shine', this)"></div></div>
+                <div class="settings-row"><label data-i18n="visShadows">🌑 الظلال على البطاقات</label><div class="settings-switch" id="sw_shadows" onclick="toggleSetting('shadows', this)"></div></div>
+            </div>
+            <div class="settings-section">
+                <h3><i class="fa-solid fa-bolt"></i> <span data-i18n="setSectionPerf">الأداء</span></h3>
+                <div class="settings-row">
+                    <label style="display:flex; flex-direction:column; gap:2px;">
+                        <span data-i18n="visPerf">⚡ وضع الأداء للأجهزة الضعيفة</span>
+                        <small style="font-size:10.5px; color:var(--text-muted); font-weight:600;" data-i18n="visPerfDesc">يعطّل الظلال والحركات والشفافية لتحسين السرعة</small>
+                    </label>
+                    <div class="settings-switch" id="sw_perf" onclick="toggleSetting('perf', this)"></div>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h3><i class="fa-solid fa-globe"></i> <span data-i18n="setSectionLanguage">اللغة</span></h3>
+                <div class="settings-row">
+                    <label data-i18n="setLanguage">اللغة</label>
+                    <select class="settings-select" id="setLanguage" onchange="setLanguage(this.value)">
+                        <option value="ar">🇪🇬 العربية</option>
+                        <option value="en">🇬🇧 English</option>
+                    </select>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h3><i class="fa-solid fa-gears"></i> <span data-i18n="setSectionAdvanced">متقدم</span></h3>
+                <div class="settings-actions">
+                    <button class="settings-action-btn ripple-btn" onclick="clearCache()"><i class="fa-solid fa-rotate"></i> <span data-i18n="advRefresh">تحديث البيانات</span></button>
+                    <button class="settings-action-btn ripple-btn" onclick="clearRecent()"><i class="fa-solid fa-eye-slash"></i> <span data-i18n="advClearRecent">مسح "شوهد مؤخراً"</span></button>
+                    <button class="settings-action-btn danger ripple-btn" onclick="clearFavoritesConfirm()"><i class="fa-solid fa-heart-crack"></i> <span data-i18n="advClearFav">مسح المفضلة</span></button>
+                    <button class="settings-action-btn ripple-btn" onclick="exportSettings()"><i class="fa-solid fa-file-export"></i> <span data-i18n="advExport">تصدير الإعدادات</span></button>
+                    <button class="settings-action-btn ripple-btn" onclick="document.getElementById('importSettingsInput').click()"><i class="fa-solid fa-file-import"></i> <span data-i18n="advImport">استيراد الإعدادات</span></button>
+                    <button class="settings-action-btn ripple-btn" onclick="exportCSV()"><i class="fa-solid fa-table"></i> <span data-i18n="advExportCSV">تصدير CSV</span></button>
+                    <button class="settings-action-btn danger ripple-btn" onclick="resetSettingsConfirm()" style="grid-column: 1 / -1;"><i class="fa-solid fa-undo"></i> <span data-i18n="advReset">إعادة الضبط الكامل</span></button>
+                </div>
+                <input type="file" id="importSettingsInput" accept=".json" style="display:none" onchange="importSettings(event)">
+            </div>
+            <div class="settings-section">
+                <h3><i class="fa-solid fa-keyboard"></i> <span data-i18n="shortcutsTitle">اختصارات لوحة المفاتيح</span></h3>
+                <div class="settings-row" style="justify-content:center;">
+                    <button class="settings-action-btn ripple-btn" onclick="openShortcutsModal(); closeSettingsModal();" style="max-width: 250px;">
+                        <i class="fa-solid fa-circle-question"></i> <span data-i18n="showShortcuts">عرض كل الاختصارات</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 📋 شريط الإحصائيات الشخصية للمستخدم -->
+<div class="user-stats-bar" id="userStatsBar">
+    <div class="user-stat-item">
+        <i class="fa-solid fa-eye"></i>
+        <span data-i18n="youViewed">شاهدت:</span> <b id="userStatViewed">0</b>
+    </div>
+    <div class="user-stat-item">
+        <i class="fa-solid fa-download"></i>
+        <span data-i18n="youDownloaded">حمّلت:</span> <b id="userStatDownloaded">0</b>
+    </div>
+    <div class="user-stat-item">
+        <i class="fa-solid fa-heart"></i>
+        <span data-i18n="youFavorites">مفضلة:</span> <b id="userStatFavorites">0</b>
+    </div>
+    <div class="user-stat-item">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        <span data-i18n="youLastVisit">آخر زيارة:</span> <b id="userStatLastVisit" data-i18n="now">الآن</b>
+    </div>
+</div>
+
+<!-- 👥 يشاهدون الآن -->
+<div class="watching-now" id="watchingNow">
+    <span class="live-dot"></span>
+    <i class="fa-solid fa-users"></i>
+    <span><b id="watchingCount">1</b> <span data-i18n="watchingNowLabel">طالباً يشاهدون الآن</span></span>
+</div>
+
+<!-- 🔔 شريط الإشعارات -->
+<div class="notification-banner" id="notificationBanner">
+    <div class="notif-icon"><i class="fa-solid fa-bell"></i></div>
+    <div class="notif-text" id="notificationText"></div>
+    <button class="notif-close" onclick="closeNotification()" aria-label="إغلاق"><i class="fa-solid fa-xmark"></i></button>
+</div>
+
+<!-- ============ HEADER ============ -->
+<div class="header" id="pageHeader">
+    <div class="header-topo" aria-hidden="true">
+        <svg viewBox="0 0 1200 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 60 Q 150 10, 300 60 T 600 60 T 900 60 T 1200 60" fill="none" stroke="currentColor" stroke-width="0.7"/>
+            <path d="M0 80 Q 150 30, 300 80 T 600 80 T 900 80 T 1200 80" fill="none" stroke="currentColor" stroke-width="0.7"/>
+            <path d="M0 100 Q 150 50, 300 100 T 600 100 T 900 100 T 1200 100" fill="none" stroke="currentColor" stroke-width="0.7"/>
+            <path d="M0 120 Q 150 70, 300 120 T 600 120 T 900 120 T 1200 120" fill="none" stroke="currentColor" stroke-width="0.7"/>
+            <path d="M0 140 Q 150 90, 300 140 T 600 140 T 900 140 T 1200 140" fill="none" stroke="currentColor" stroke-width="0.7"/>
+        </svg>
+    </div>
+    <svg width="60" height="60" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="margin-bottom:12px; filter:drop-shadow(0 6px 12px rgba(59,130,246,0.2));">
+        <defs><linearGradient id="gradBlue" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" /><stop offset="100%" style="stop-color:#1e3a8a;stop-opacity:1" /></linearGradient></defs>
+        <path d="M50 20 L15 40 L50 60 L85 40 Z" fill="url(#gradBlue)" />
+        <path d="M15 55 L50 75 L85 55" fill="none" stroke="#f59e0b" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M15 70 L50 90 L85 70" fill="none" stroke="#10b981" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+    <h1 id="mainTitle" data-i18n="appTitle">الأرشيف الأكاديمي الرقمي والمكتبة الشاملة</h1>
+    <p class="dynamic-greeting" id="dynamicGreeting" data-i18n="greeting">مساحتك المخصصة لكل مواد التربوي والتخصص</p>
+</div>
+
+<!-- ============ META ROW ============ -->
+<div class="meta-row">
+    <div class="hero-stats" id="heroStats">
+        <div class="stat-item">
+            <div class="stat-icon"><i class="fa-solid fa-book-open"></i></div>
+            <div class="stat-info">
+                <span class="stat-number" id="statFilesCount">0</span>
+                <span class="stat-label" data-i18n="filesAvailable">ملف متاح</span>
+            </div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+            <div class="stat-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+            <div class="stat-info">
+                <span class="stat-number" id="statStudentsCount">0</span>
+                <span class="stat-label" data-i18n="studentsBenefited">طالب استفاد</span>
+            </div>
+        </div>
+    </div>
+    <div class="last-update-badge" id="lastUpdateBadge">
+        <i class="fa-solid fa-circle"></i> <span data-i18n="updating">جاري التحديث...</span>
+    </div>
+</div>
+
+<div id="toast"></div>
+<button id="scrollTopBtn" class="ripple-btn" onclick="scrollToTop()" aria-label="Top"><i class="fa-solid fa-arrow-up"></i></button>
+
+<!-- ============ Install Prompt ============ -->
+<div id="installPrompt" class="install-prompt-overlay">
+    <div class="install-prompt-box">
+        <button class="close-install" onclick="closeInstallPrompt()"><i class="fa-solid fa-xmark"></i></button>
+        <div style="font-size:35px; color:var(--primary-color); margin-bottom:10px;"><i class="fa-solid fa-arrow-down-to-bracket"></i></div>
+        <h3 data-i18n="installTitle">أضف الأرشيف لهاتفك!</h3>
+        <p data-i18n="installDesc">للوصول السريع لجميع المواد والملخصات بدون الحاجة للمتصفح.</p>
+        <div id="installInstructions" class="install-instructions"></div>
+    </div>
+</div>
+
+<!-- ============ QR Modal ============ -->
+<div id="qrModal" class="modal-overlay">
+    <div class="modal-content">
+        <button class="close-modal" onclick="closeQR()"><i class="fa-solid fa-xmark"></i></button>
+        <h3 class="modal-title" id="qrTitle">—</h3>
+        <p class="modal-desc" data-i18n="qrDesc">امسح الباركود بكاميرا الهاتف 📱</p>
+        <div id="qrcode"></div>
+    </div>
+</div>
+
+<!-- ============ Export Modal ============ -->
+<div id="exportModal" class="modal-overlay">
+    <div class="modal-content" style="max-width:380px;">
+        <button class="close-modal" onclick="closeExportModal()"><i class="fa-solid fa-xmark"></i></button>
+        <h3 class="modal-title" data-i18n="exportTitle">📚 شارك مكتبتك الخاصة</h3>
+        <p class="modal-desc" style="margin-bottom:15px;" data-i18n="exportDesc">اختر الطريقة الأنسب</p>
+        <div id="exportShareOptions" style="display:flex; flex-direction:column; gap:10px;"></div>
+        <textarea id="exportTextPreview" readonly style="width:100%; margin-top:15px; height:90px; border-radius:12px; border:1.5px solid var(--border-color); padding:10px; font-family:'Cairo',sans-serif; font-size:12px; resize:none; background:var(--input-bg); color:var(--text-color);"></textarea>
+    </div>
+</div>
+
+<!-- ============ Preview Modal ============ -->
+<div id="previewModal" class="modal-overlay">
+    <div class="modal-content">
+        <button class="close-modal" onclick="closePreview()"><i class="fa-solid fa-xmark"></i></button>
+        <div class="preview-title" id="previewTitleEl">—</div>
+        <button class="preview-nav-btn prev" onclick="previewNav(-1)" aria-label="Previous"><i class="fa-solid fa-chevron-right"></i></button>
+        <button class="preview-nav-btn next" onclick="previewNav(1)" aria-label="Next"><i class="fa-solid fa-chevron-left"></i></button>
+        <iframe id="previewFrame" src="" allow="autoplay" loading="lazy"></iframe>
+        <div class="preview-actions">
+            <a href="#" id="previewOpenNewTab" target="_blank" rel="noopener noreferrer" class="preview-action-btn">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> <span data-i18n="openInNewTab">فتح في تبويب جديد</span>
+            </a>
+            <a href="#" id="previewDownloadLink" target="_blank" rel="noopener noreferrer" class="preview-action-btn success">
+                <i class="fa-solid fa-download"></i> <span data-i18n="downloadBtn">تحميل</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- ============ Shortcuts Modal ============ -->
+<div id="shortcutsModal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 500px;">
+        <button class="close-modal" onclick="closeShortcutsModal()"><i class="fa-solid fa-xmark"></i></button>
+        <h3 class="modal-title"><i class="fa-solid fa-keyboard" style="color: var(--primary-color);"></i> <span data-i18n="shortcutsTitle">اختصارات لوحة المفاتيح</span></h3>
+        <p class="modal-desc" style="margin-bottom: 12px;" data-i18n="shortcutsDesc">وفّر وقتك باستخدام هذه الاختصارات السريعة</p>
+        <div class="shortcuts-list">
+            <div class="shortcut-row"><span data-i18n="scSearch">البحث</span><span class="shortcut-key"><kbd>S</kbd></span></div>
+            <div class="shortcut-row"><span data-i18n="scDarkMode">تبديل الوضع الليلي</span><span class="shortcut-key"><kbd>D</kbd></span></div>
+            <div class="shortcut-row"><span data-i18n="scFilters">الفلاتر</span><span class="shortcut-key"><kbd>F</kbd></span></div>
+            <div class="shortcut-row"><span data-i18n="scLibrary">مكتبتي</span><span class="shortcut-key"><kbd>M</kbd></span></div>
+            <div class="shortcut-row"><span data-i18n="scTop">العودة للأعلى</span><span class="shortcut-key"><kbd>T</kbd></span></div>
+            <div class="shortcut-row"><span data-i18n="scReadingMode">وضع القراءة</span><span class="shortcut-key"><kbd>R</kbd></span></div>
+            <div class="shortcut-row"><span data-i18n="scClose">إغلاق النوافذ</span><span class="shortcut-key"><kbd>Esc</kbd></span></div>
+            <div class="shortcut-row"><span data-i18n="scShowShortcuts">عرض الاختصارات</span><span class="shortcut-key"><kbd>?</kbd></span></div>
+        </div>
+    </div>
+</div>
+
+<!-- ============ Report Modal ============ -->
+<div id="reportModal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 420px;">
+        <button class="close-modal" onclick="closeReportModal()"><i class="fa-solid fa-xmark"></i></button>
+        <h3 class="modal-title"><i class="fa-solid fa-triangle-exclamation" style="color: #f59e0b;"></i> <span data-i18n="reportTitle">إبلاغ عن مشكلة</span></h3>
+        <p class="modal-desc" style="margin-bottom: 15px;" data-i18n="reportDesc">ساعدنا في تحسين المنصة</p>
+        <form class="report-form" onsubmit="submitReport(event)">
+            <div>
+                <label data-i18n="reportIssueType">نوع المشكلة</label>
+                <select id="reportType" required>
+                    <option value="broken" data-i18n="reportBroken">رابط معطل / ملف لا يفتح</option>
+                    <option value="wrong" data-i18n="reportWrong">محتوى خاطئ / لا يطابق العنوان</option>
+                    <option value="inappropriate" data-i18n="reportInappropriate">محتوى غير مناسب</option>
+                    <option value="other" data-i18n="reportOther">مشكلة أخرى</option>
+                </select>
+            </div>
+            <div>
+                <label data-i18n="reportFileName">اسم الملف</label>
+                <input type="text" id="reportFileName" readonly>
+            </div>
+            <div>
+                <label data-i18n="reportDetails">تفاصيل إضافية (اختياري)</label>
+                <textarea id="reportDetails" data-i18n-ph="reportPlaceholder"></textarea>
+            </div>
+            <button type="submit" class="report-submit-btn ripple-btn">
+                <i class="fa-solid fa-paper-plane"></i> <span data-i18n="reportSend">إرسال الإبلاغ</span>
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- ============ Save Filter Modal ============ -->
+<div id="saveFilterModal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 380px;">
+        <button class="close-modal" onclick="closeSaveFilterModal()"><i class="fa-solid fa-xmark"></i></button>
+        <h3 class="modal-title"><i class="fa-solid fa-bookmark" style="color: var(--primary-color);"></i> <span data-i18n="saveFilterTitle">حفظ الفلتر الحالي</span></h3>
+        <p class="modal-desc" style="margin-bottom: 15px;" data-i18n="saveFilterDesc">احفظ الإعدادات الحالية للرجوع إليها بسرعة</p>
+        <form class="save-filter-form" onsubmit="submitSaveFilter(event)">
+            <input type="text" id="saveFilterName" placeholder="مثال: مراجعة الرياضيات" required maxlength="40" autocomplete="off">
+            <button type="submit" class="report-submit-btn ripple-btn">
+                <i class="fa-solid fa-check"></i> <span data-i18n="saveFilterBtn">حفظ الفلتر</span>
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- ============ STICKY BAR ============ -->
+<div class="sticky-glass-bar">
+    <div class="top-row">
+        <div class="search-wrapper">
+            <input type="text" id="searchInput" class="search-box" placeholder="جاري تفعيل البحث الذكي..." autocomplete="off">
+            <div id="searchSuggestions" class="search-suggestions"></div>
+        </div>
+        <div class="view-toggles">
+            <button id="gridViewBtn" class="view-btn active ripple-btn" onclick="toggleView('grid')"><i class="fa-solid fa-table-cells-large"></i></button>
+            <button id="listViewBtn" class="view-btn ripple-btn" onclick="toggleView('list')"><i class="fa-solid fa-list-ul"></i></button>
+            <button id="quickRefreshBtn" class="quick-refresh-btn ripple-btn" onclick="quickRefresh()" title="تحديث سريع"><i class="fa-solid fa-rotate"></i></button>
+            <button id="settingsToggleBtn" class="view-btn ripple-btn" onclick="openSettingsModal()"><i class="fa-solid fa-sliders"></i></button>
+        </div>
+    </div>
+    <div class="action-btns-group">
+        <button id="filtersToggleBtn" class="filters-toggle-btn ripple-btn" onclick="toggleFiltersPanel()"><i class="fa-solid fa-filter"></i> <span data-i18n="filtersBtn">الفلاتر</span></button>
+        <button id="favToggleBtn" class="fav-toggle-btn ripple-btn" onclick="toggleFavView()"><span data-i18n="favBtn">🤍 مكتبتي</span></button>
+        <button id="shareLinkBtn" class="fav-toggle-btn ripple-btn" onclick="shareCurrentFilter()" style="border-color: var(--primary-color); color: var(--primary-color); flex: 0 0 auto; min-width: 44px;" title="مشاركة رابط الفلتر"><i class="fa-solid fa-link"></i></button>
+        <button id="exportFavBtn" onclick="exportLibrary()" class="ripple-btn" style="display:none; padding:0 15px; border-radius:var(--radius-input); border:none; background:linear-gradient(135deg, #10b981, #059669); color:white; cursor:pointer; font-family:inherit; font-weight:800; height:44px; display:flex; align-items:center; gap:6px;">
+            <i class="fa-solid fa-share-nodes"></i> <span data-i18n="shareBtn">مشاركة</span>
+        </button>
+    </div>
+    <div id="savedFiltersBar" class="saved-filters-bar" style="display: none;">
+        <span style="color: var(--text-muted); font-weight: 800;"><i class="fa-solid fa-bookmark"></i> <span data-i18n="savedFiltersLabel">محفوظة:</span></span>
+        <div id="savedFiltersList" style="display: contents;"></div>
+        <button class="save-filter-btn ripple-btn" onclick="openSaveFilterModal()">
+            <i class="fa-solid fa-plus"></i> <span data-i18n="saveCurrentFilter">حفظ الحالي</span>
+        </button>
+    </div>
+    <div id="filtersPanel" style="display:none;">
+        <div class="search-row">
+            <select id="sortFilter" class="filter-select sort-select">
+                <option value="date-desc" data-i18n="sortNewest">🔽 الأحدث أولاً</option>
+                <option value="date-asc" data-i18n="sortOldest">🔼 الأقدم أولاً</option>
+                <option value="alpha" data-i18n="sortAlpha">🔠 أبجدياً (أ - ي)</option>
+                <option value="downloads-desc" data-i18n="sortDownloads">🔥 الأكثر تحميلاً</option>
+            </select>
+            <select id="subjectNameFilter" class="filter-select"><option value="الكل" data-i18n="filterSubject">📘 المادة (الكل)</option></select>
+            <select id="yearFilter" class="filter-select">
+                <option value="الكل" data-i18n="filterYear">🎓 الفرقة</option>
+                <option value="الفرقة الأولى" data-i18n="year1">الفرقة الأولى</option>
+                <option value="الفرقة الثانية" data-i18n="year2">الفرقة الثانية</option>
+                <option value="الفرقة الثالثة" data-i18n="year3">الفرقة الثالثة</option>
+                <option value="الفرقة الرابعة" data-i18n="year4">الفرقة الرابعة</option>
+            </select>
+            <select id="eduFilter" class="filter-select">
+                <option value="الكل" data-i18n="filterEdu">🏫 التعليم</option>
+                <option value="عام" data-i18n="eduGeneral">عام</option>
+                <option value="تعليم أساسي" data-i18n="eduBasic">تعليم أساسي</option>
+            </select>
+            <select id="majorFilter" class="filter-select">
+                <option value="الكل" data-i18n="filterMajor">📚 التخصص</option>
+                <option value="لغة عربية" data-i18n="majorArabic">لغة عربية</option>
+                <option value="لغة إنجليزية" data-i18n="majorEnglish">لغة إنجليزية</option>
+                <option value="رياضيات" data-i18n="majorMath">رياضيات</option>
+                <option value="رياضيات باللغة الإنجليزية" data-i18n="majorMathEn">رياضيات بالإنجليزية</option>
+                <option value="كيمياء" data-i18n="majorChemistry">كيمياء</option>
+                <option value="كيمياء باللغة الإنجليزية" data-i18n="majorChemistryEn">كيمياء بالإنجليزية</option>
+                <option value="فيزياء" data-i18n="majorPhysics">فيزياء</option>
+                <option value="بيولوجي" data-i18n="majorBiology">بيولوجي</option>
+                <option value="بيولوجي باللغة الإنجليزية" data-i18n="majorBiologyEn">بيولوجي بالإنجليزية</option>
+            </select>
+            <select id="typeFilter" class="filter-select">
+                <option value="الكل" data-i18n="filterType">🏷️ النوع</option>
+                <option value="مادة تخصص" data-i18n="typeSpec">مادة تخصص</option>
+                <option value="مادة تربوية" data-i18n="typeEdu">مادة تربوية</option>
+            </select>
+            <select id="semesterFilter" class="filter-select">
+                <option value="الكل" data-i18n="filterSemester">⏳ الترم</option>
+                <option value="الفصل الأول" data-i18n="sem1">الفصل الأول</option>
+                <option value="الفصل الثاني" data-i18n="sem2">الفصل الثاني</option>
+            </select>
+        </div>
+        <div style="text-align:center; margin-top:12px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+            <button id="resetFiltersBtn" class="reset-btn ripple-btn" onclick="resetAllFilters()" style="display:inline-flex;">🔄 <span data-i18n="resetFilters">تصفير الفلاتر</span></button>
+            <button class="reset-btn ripple-btn" onclick="openSaveFilterModal()" style="display:inline-flex; border-color: var(--primary-color); color: var(--primary-color);">💾 <span data-i18n="saveFilterShort">حفظ الفلتر</span></button>
+        </div>
+    </div>
+</div>
+
+<div class="file-counter" id="fileCountContainer">
+    <span id="fileCountPrefix" data-i18n="loading">جاري الاتصال بقاعدة البيانات...</span>
+    <span class="count-number" id="countNum"></span>
+    <span id="fileCountSuffix"></span>
+</div>
+
+<div id="recentSection">
+    <div id="recentHeader" class="recent-header" onclick="toggleRecentSection()">
+        <h3><i class="fa-regular fa-eye"></i> <span data-i18n="recentTitle">شوهد مؤخراً</span></h3>
+        <i class="fa-solid fa-chevron-down recent-toggle-icon"></i>
+    </div>
+    <div id="recentBody"><div id="recentContainer" class="recent-scroll-grid"></div></div>
+</div>
+
+<div class="files-grid" id="filesContainer">
+    <div class="skeleton-card"><div class="skeleton-pulse sk-badge"></div><div class="skeleton-pulse sk-title"></div><div class="skeleton-pulse sk-sub"></div><div class="skeleton-pulse sk-line"></div><div class="skeleton-pulse sk-line"></div><div class="sk-btns"><div class="skeleton-pulse sk-btn"></div><div class="skeleton-pulse sk-btn"></div></div></div>
+</div>
+
+<div id="loadMoreContainer" style="text-align:center; width:100%; display:none;">
+    <button class="load-more-btn ripple-btn" onclick="loadMore()"><i class="fa-solid fa-chevron-down"></i> <span data-i18n="loadMore">عرض المزيد</span></button>
+</div>
+
+<!-- 🌊 موجة فاصلة -->
+<div class="wave-divider" aria-hidden="true">
+    <svg viewBox="0 0 1200 50" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,25 C150,50 350,0 600,25 C850,50 1050,0 1200,25 L1200,50 L0,50 Z"/>
+    </svg>
+</div>
+
+<div id="contributorsSection" style="display:none; max-width:1200px; margin:40px auto 0 auto; width:100%;">
+    <div class="extra-box open">
+        <h3 class="section-tab" data-i18n="contributorsTitle">🏆 أكثر المساهمين</h3>
+        <div class="extra-box-content">
+            <p style="color:var(--text-muted); font-size:13px; margin:0 0 15px 0; font-weight:600; line-height:1.6;" data-i18n="contributorsDesc">هؤلاء الطلاب أثروا الأرشيف بأكبر عدد من الملخصات — تكريماً لجهودهم 💙</p>
+            <div id="contributorsList" class="contributors-list"></div>
+        </div>
+    </div>
+</div>
+
+<div class="extras-container">
+    <div class="extra-box tools-box">
+        <h3 class="section-tab" data-i18n="toolsTitle">🛠️ مكتبة الأدوات المساعدة</h3>
+        <div style="text-align:center; padding:10px 0;">
+            <p style="color:var(--text-muted); font-size:14px; margin-bottom:20px; font-weight:600;" data-i18n="toolsDesc">جمعنا لك 50 موقعاً وأداة ذكية لمساعدتك.</p>
+            <button id="toggleToolsBtn" onclick="toggleToolsSection()" class="load-more-btn ripple-btn" style="margin:0 auto; display:inline-flex; justify-content:center; align-items:center; gap:8px;">
+                <i class="fa-solid fa-toolbox"></i> <span data-i18n="toolsExplore">استكشف مكتبة الأدوات</span>
+            </button>
+        </div>
+        <div id="toolsContentWrapper" style="display:none; margin-top:25px; border-top:1px dashed var(--border-color); padding-top:25px;">
+            <div class="tools-search-wrapper">
+                <i class="fa-solid fa-search tools-search-icon"></i>
+                <input type="text" id="toolsSearchInput" class="tools-search-box" onkeyup="searchTools()" data-i18n-ph="toolsSearchPh" placeholder="ابحث في 50 أداة...">
+            </div>
+            <div class="tools-filters">
+                <button class="tool-filter-btn active" onclick="filterTools('all', this)" data-i18n="toolsAll">الكل (50)</button>
+                <button class="tool-filter-btn" onclick="filterTools('math', this)" data-i18n="toolsMath">📐 رياضيات وعلوم</button>
+                <button class="tool-filter-btn" onclick="filterTools('edu', this)" data-i18n="toolsEdu">🧠 تربية وعلم نفس</button>
+                <button class="tool-filter-btn" onclick="filterTools('research', this)" data-i18n="toolsResearch">📚 بحث ومراجع</button>
+                <button class="tool-filter-btn" onclick="filterTools('writing', this)" data-i18n="toolsWriting">✍️ كتابة</button>
+                <button class="tool-filter-btn" onclick="filterTools('design', this)" data-i18n="toolsDesign">🎨 تصميم وعروض</button>
+                <button class="tool-filter-btn" onclick="filterTools('productivity', this)" data-i18n="toolsProductivity">⏱️ إنتاجية</button>
+                <button class="tool-filter-btn" onclick="filterTools('utilities', this)" data-i18n="toolsUtilities">🛠️ عامة</button>
+            </div>
+            <div class="tools-grid" id="toolsGrid"></div>
+        </div>
+    </div>
+
+    <div class="extra-box open" id="contributeBox">
+        <h3 class="section-tab" data-i18n="contributeTitle">🤝 كيف تساهم معنا؟</h3>
+        <div class="extra-box-content">
+            <div class="contact-text" data-i18n="contributeText">
+                الأرشيف يُبنى بجهود الطلاب ولأجل الطلاب. إذا قمت بكتابة ملخص مميز، أو جمعت أسئلة سنوات سابقة، فلا تدعها حبيسة هاتفك! شاركها لتكون صدقة جارية لعلمك وتنقذ بها زميلاً ليلة الامتحان.<br><br>
+                <strong>خطوات المشاركة بسيطة:</strong><br>
+                1. تأكد أن الملف بصيغة PDF أو صور واضحة.<br>
+                2. سمّ الملف بوضوح (مثال: ملخص جبر مجرد - فرقة ثانية - إعداد فلان).<br>
+                3. أرسل الملف عبر الإيميل المخصص، وسيتم مراجعته ورفعه باسمك.
+            </div>
+            <div class="tools-links" style="margin-top:15px; flex-direction:column; align-items:center;">
+                <a href="#" id="contactFormBtn" target="_blank" rel="noopener noreferrer" class="tool-link ripple-btn" style="background:linear-gradient(135deg, #10b981, #059669); color:white; border:none; width:100%; max-width:320px; text-align:center; display:block;"><i class="fa-solid fa-file-circle-plus"></i> <span data-i18n="contributeFormBtn">املأ نموذج رفع الملف (الأسهل)</span></a>
+                <a href="#" id="contactEmailBtn" class="tool-link ripple-btn" style="background:var(--input-bg); color:var(--header-color); border:1.5px solid var(--border-color); width:100%; max-width:320px; text-align:center; display:block;"><i class="fa-solid fa-envelope"></i> <span data-i18n="contributeEmailBtn">أو أرسله عبر الجيميل</span></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="extra-box open" id="policyBox">
+        <h3 class="section-tab" data-i18n="policyTitle">🛡️ سياسة النشر وشروط الإضافة</h3>
+        <div class="extra-box-content">
+            <div class="contact-text" style="margin-bottom:8px;" data-i18n="policyIntro">للحفاظ على جودة المنصة وقانونيتها:</div>
+            <ul class="policy-list">
+                <li>
+                    <strong data-i18n="policyAllowedTitle">✅ ما يُسمح بإضافته:</strong>
+                    <br>
+                    <span data-i18n="policyAllowedList">- الملخصات الشخصية المكتوبة بخط اليد أو المطبوعة.<br>- الخرائط الذهنية وتبسيط القوانين والنظريات.<br>- تجميعات أسئلة الامتحانات السابقة.<br>- العروض التقديمية التي صممها الطلاب كأنشطة.</span>
+                </li>
+                <li style="margin-top:10px;">
+                    <strong data-i18n="policyDeniedTitle">❌ ما نعتذر عن نشره:</strong>
+                    <br>
+                    <span data-i18n="policyDeniedList">- الكتب الجامعية الرسمية للدكاترة.<br>- المذكرات التجارية الخاصة بالسناتر.<br>- الملفات غير الواضحة أو التي تفتقد لاسم المادة والفرقة.</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="extra-box about-box open" id="aboutBox" style="text-align:right;">
+        <h3 class="section-tab" data-i18n="aboutTitle">🌟 عن المنصة</h3>
+        <div class="extra-box-content">
+            <p class="about-desc" style="text-align:right;" data-i18n="aboutDesc">بدأت الفكرة من معاناة حقيقية نعيشها كطلاب؛ حيث تتوه الملفات المهمة وسط آلاف الرسائل في جروبات الواتساب، وتضيع الملخصات قبل الامتحانات. لذلك، تم بناء "الأرشيف الأكاديمي الرقمي" ليكون الذاكرة الدائمة.</p>
+            <div class="problems-grid">
+                <div class="problem-card"><h4><i class="fa-solid fa-search" style="color:var(--primary-color)"></i> <span data-i18n="prob1Title">وداعاً للبحث العشوائي</span></h4><p data-i18n="prob1Desc">فلترة المواد بضغطة زر حسب الفرقة، التخصص، أو الترم لتجد ما تريده في ثانية.</p></div>
+                <div class="problem-card"><h4><i class="fa-solid fa-cloud" style="color:#10b981"></i> <span data-i18n="prob2Title">روابط دائمة لا تموت</span></h4><p data-i18n="prob2Desc">جميع الملفات مرفوعة على خوادم سحابية آمنة.</p></div>
+                <div class="problem-card"><h4><i class="fa-solid fa-sd-card" style="color:#f59e0b"></i> <span data-i18n="prob3Title">توفير مساحة هاتفك</span></h4><p data-i18n="prob3Desc">يمكنك عرض الملفات مباشرة من المنصة، أو إضافتها لمكتبتك.</p></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="extra-box faq-box open" id="faqBox">
+        <h3 class="section-tab" data-i18n="faqTitle">❓ الأسئلة الشائعة</h3>
+        <div class="extra-box-content">
+            <div class="faq-item"><div class="faq-question" onclick="toggleFAQ(this)"><span data-i18n="faqQ1">هل أحتاج للإنترنت في كل مرة أفتح فيها الموقع؟</span><i class="fa-solid fa-chevron-down faq-icon"></i></div><div class="faq-answer" data-i18n="faqA1">يمكنك رؤية آخر نسخة محفوظة من البيانات عند انقطاع الاتصال، لكن تحديث الملفات والروابط الجديدة يحتاج إلى الإنترنت.</div></div>
+            <div class="faq-item"><div class="faq-question" onclick="toggleFAQ(this)"><span data-i18n="faqQ2">كيف أصل للمنصة بسرعة دون البحث عن الرابط؟</span><i class="fa-solid fa-chevron-down faq-icon"></i></div><div class="faq-answer" data-i18n="faqA2">يمكنك تثبيت المنصة كتطبيق! في الأندرويد: النقاط الثلاث ثم "إضافة للشاشة الرئيسية".</div></div>
+            <div class="faq-item"><div class="faq-question" onclick="toggleFAQ(this)"><span data-i18n="faqQ3">لم أجد المادة التي أبحث عنها، ماذا أفعل؟</span><i class="fa-solid fa-chevron-down faq-icon"></i></div><div class="faq-answer" data-i18n="faqA3">تأكد أولاً من تصفير الفلاتر. إذا لم تجدها، فهذا يعني أن أحداً لم يقم برفع ملخص لها بعد.</div></div>
+            <div class="faq-item"><div class="faq-question" onclick="toggleFAQ(this)"><span data-i18n="faqQ4">هل "مكتبتي الخاصة" تُحفظ إذا غيرت هاتفي؟</span><i class="fa-solid fa-chevron-down faq-icon"></i></div><div class="faq-answer" data-i18n="faqA4">نظام المفضلة يعمل بـ Local Storage، فتُحفظ على متصفح جهازك الحالي فقط.</div></div>
+            <div class="faq-item"><div class="faq-question" onclick="toggleFAQ(this)"><span data-i18n="faqQ5">الرابط لا يعمل أو الملف لا يفتح، ما الحل؟</span><i class="fa-solid fa-chevron-down faq-icon"></i></div><div class="faq-answer" data-i18n="faqA5">أحياناً يحدث ضغط على خوادم جوجل. ننصحك بنسخ الرابط وفتحه في متصفح آخر.</div></div>
+            <div class="faq-item"><div class="faq-question" onclick="toggleFAQ(this)"><span data-i18n="faqQ6">هل يمكنني طباعة هذه الملخصات في أي مكتبة؟</span><i class="fa-solid fa-chevron-down faq-icon"></i></div><div class="faq-answer" data-i18n="faqA6">بكل تأكيد. جميع الملفات المرفوعة مجهزة بصيغة PDF القياسية.</div></div>
+        </div>
+    </div>
+</div>
+
+<div class="maker-credit" id="makerCredit">
+    <div class="maker-line">
+        <span data-i18n="madeWith">صُنع بـ</span>
+        <span class="heart-icon">❤️</span>
+        <span data-i18n="by">بواسطة</span>
+        <span class="maker-name">M.A.Abdalhamid</span>
+    </div>
+    <div class="maker-sub" data-i18n="makerSub">لخدمة طلاب كلية التربية · جميع الحقوق محفوظة</div>
+</div>
+
+</body>
+</html>
